@@ -131,8 +131,8 @@ int main() {
    Convert_Array(C.Ent, C.Ent_str, nm, ls*ls, convertToNonStridedArray);
 
    // copy det
-	cudaMemcpy(det_str, dDet, size_det*sizeof(Real), cudaMemcpyDeviceToHost);
-	Convert_Array(det, det_str, nm, 1, convertToNonStridedArray);
+   cudaMemcpy(det_str, dDet, size_det*sizeof(Real), cudaMemcpyDeviceToHost);
+   Convert_Array(det, det_str, nm, 1, convertToNonStridedArray);
 
    // copy M_inv
    cudaMemcpy(M_inv.Ent_str, M_inv.dEnt, size_str, cudaMemcpyDeviceToHost);
@@ -224,31 +224,31 @@ int main() {
    }
 
 
-	// print elapsed time
-	printf("\n\n#### Elapsed times ####\n\n");
-	printf("Matrix x Vector: %f seconds\n", et_prd/10000.0);
+   // print elapsed time
+   printf("\n\n#### Elapsed times ####\n\n");
+   printf("Matrix x Vector: %f seconds\n", et_prd/10000.0);
    printf("Matrix + Matrix: %f seconds\n", et_pls/10000.0);
    printf("Determinant: %f seconds\n", et_det/10000.0);
    printf("Inverse: %f seconds\n", et_inv/10000.0);
 
 
+   // cleanup
+   Destroy_FMatrixArray(&M);
+   Destroy_FMatrixArray(&M_inv);
+   Destroy_FMatrixArray(&B);
+   Destroy_FMatrixArray(&C);
+   free(b);
+   free(c);
+   free(det);
 
-	// cleanup
-	Destroy_FMatrixArray(&M);
-	Destroy_FMatrixArray(&M_inv);
-	Destroy_FMatrixArray(&B);
-	Destroy_FMatrixArray(&C);
-	free(b);
-	free(c);
-	free(det);
-	#ifdef FEMLIB_CUDA
-	free(b_str);
-	free(c_str);
-	cudaFree(db);
-	cudaFree(dc);
-  free(det_str);
-  cudaFree(dDet);
-	#endif
+   #ifdef FEMLIB_CUDA
+   free(b_str);
+   free(c_str);
+   cudaFree(db);
+   cudaFree(dc);
+   free(det_str);
+   cudaFree(dDet);
+   #endif
 
-	return 0;
+   return 0;
 }
